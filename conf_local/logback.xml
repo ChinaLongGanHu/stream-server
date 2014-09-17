@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8"?>  
+
+<configuration debug="true">
+	
+	<property name="LOG_HOME" value="/data/logs/clickstream" />
+	
+	<property name="LOG_PATTERN" value="%d{yyy-MM-dd HH:mm:ss.SSS} [%thread] [%-5level] %logger{36} [%method:%line] - %msg%n" />
+	
+	<appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
+		<!-- encoders are assigned the type ch.qos.logback.classic.encoder.PatternLayoutEncoderby default -->
+		<encoder>
+			<pattern>${LOG_PATTERN}</pattern>  <!-- %d{yyy-MM-dd HH:mm:ss} %t [%p] %l:%n%m%n%n -->
+		</encoder>
+	</appender>
+	
+	<appender name="base_appender" class="ch.qos.logback.core.rolling.RollingFileAppender">
+		<file>${LOG_HOME}/base.log</file>
+		<rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+			<fileNamePattern>${LOG_HOME}/base.%d{yyyy-MM-dd}.%i.log.zip</fileNamePattern>
+			<timeBasedFileNamingAndTriggeringPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedFNATP">
+				<maxFileSize>1024MB</maxFileSize>
+			</timeBasedFileNamingAndTriggeringPolicy>
+			<maxHistory>30</maxHistory>
+		</rollingPolicy>
+		<layout class="ch.qos.logback.classic.PatternLayout">
+			<pattern>${LOG_PATTERN}</pattern>
+		</layout>
+	</appender>
+	
+	<appender name="server_appender" class="ch.qos.logback.core.rolling.RollingFileAppender">
+		<file>${LOG_HOME}/server.log</file>
+		<rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+			<fileNamePattern>${LOG_HOME}/server.%d{yyyy-MM-dd}.%i.log.zip</fileNamePattern>
+			<timeBasedFileNamingAndTriggeringPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedFNATP">
+				<maxFileSize>1024MB</maxFileSize>
+			</timeBasedFileNamingAndTriggeringPolicy>
+			<maxHistory>30</maxHistory>
+		</rollingPolicy>
+		<layout class="ch.qos.logback.classic.PatternLayout">
+			<pattern>${LOG_PATTERN}</pattern>
+		</layout>
+	</appender>
+	
+	<appender name="writer_appender" class="ch.qos.logback.core.rolling.RollingFileAppender">
+		<file>${LOG_HOME}/writer.log</file>
+		<rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+			<fileNamePattern>${LOG_HOME}/writer.%d{yyyy-MM-dd}.%i.log.zip</fileNamePattern>
+			<timeBasedFileNamingAndTriggeringPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedFNATP">
+				<maxFileSize>1024MB</maxFileSize>
+			</timeBasedFileNamingAndTriggeringPolicy>
+			<maxHistory>30</maxHistory>
+		</rollingPolicy>
+		<layout class="ch.qos.logback.classic.PatternLayout">
+			<pattern>${LOG_PATTERN}</pattern>
+		</layout>
+	</appender>
+	
+	<logger name="com.to8to.userevent.writer" level="TRACE" additivity="true">
+		<appender-ref ref="writer_appender" />
+	</logger>
+	
+	<logger name="com.to8to.userevent.server" level="TRACE" additivity="true">
+		<appender-ref ref="server_appender" />
+	</logger>
+	
+	<root level="TRACE">
+		<appender-ref ref="STDOUT" />
+		<appender-ref ref="base_appender" />
+	</root>
+</configuration>
