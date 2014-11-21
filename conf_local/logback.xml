@@ -1,10 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>  
 
-<configuration debug="true">
+<configuration scan="true" scanPeriod="60 seconds" debug="true">
 	
 	<property name="LOG_HOME" value="/data/logs/clickstream" />
 	
+	<property name="ClickStreamData" value="/data/logs/UserEventLog/" />
+	
 	<property name="LOG_PATTERN" value="%d{yyy-MM-dd HH:mm:ss.SSS} [%thread] [%-5level] %logger{36} [%method:%line] - %msg%n" />
+	<property name="ClickStreamData_PATTERN" value="%msg%n" />
 	
 	<appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
 		<!-- encoders are assigned the type ch.qos.logback.classic.encoder.PatternLayoutEncoderby default -->
@@ -20,7 +23,7 @@
 			<timeBasedFileNamingAndTriggeringPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedFNATP">
 				<maxFileSize>1024MB</maxFileSize>
 			</timeBasedFileNamingAndTriggeringPolicy>
-			<maxHistory>30</maxHistory>
+			<maxHistory>2</maxHistory>
 		</rollingPolicy>
 		<layout class="ch.qos.logback.classic.PatternLayout">
 			<pattern>${LOG_PATTERN}</pattern>
@@ -34,7 +37,7 @@
 			<timeBasedFileNamingAndTriggeringPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedFNATP">
 				<maxFileSize>1024MB</maxFileSize>
 			</timeBasedFileNamingAndTriggeringPolicy>
-			<maxHistory>30</maxHistory>
+			<maxHistory>2</maxHistory>
 		</rollingPolicy>
 		<layout class="ch.qos.logback.classic.PatternLayout">
 			<pattern>${LOG_PATTERN}</pattern>
@@ -48,15 +51,33 @@
 			<timeBasedFileNamingAndTriggeringPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedFNATP">
 				<maxFileSize>1024MB</maxFileSize>
 			</timeBasedFileNamingAndTriggeringPolicy>
-			<maxHistory>30</maxHistory>
+			<maxHistory>2</maxHistory>
 		</rollingPolicy>
 		<layout class="ch.qos.logback.classic.PatternLayout">
 			<pattern>${LOG_PATTERN}</pattern>
 		</layout>
 	</appender>
 	
+	<appender name="newwriter_appender" class="ch.qos.logback.core.rolling.RollingFileAppender">
+		<file>${ClickStreamData}/UserEventLog.json</file>
+		<rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+			<fileNamePattern>${ClickStreamData}/UserEventLog%d{yyyy-MM-dd}.zip</fileNamePattern>
+			<timeBasedFileNamingAndTriggeringPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedFNATP">
+				<maxFileSize>20480MB</maxFileSize>
+			</timeBasedFileNamingAndTriggeringPolicy>
+			<maxHistory>7</maxHistory>
+		</rollingPolicy>
+		<layout class="ch.qos.logback.classic.PatternLayout">
+			<pattern>${ClickStreamData_PATTERN}</pattern>
+		</layout>
+	</appender>
+	
 	<logger name="com.to8to.userevent.writer" level="TRACE" additivity="true">
 		<appender-ref ref="writer_appender" />
+	</logger>
+	
+	<logger name="com.to8to.userevent.newWriter" level="TRACE" additivity="true">
+		<appender-ref ref="newwriter_appender" />
 	</logger>
 	
 	<logger name="com.to8to.userevent.server" level="TRACE" additivity="true">
@@ -65,6 +86,7 @@
 	
 	<root level="TRACE">
 		<appender-ref ref="STDOUT" />
-		<appender-ref ref="base_appender" />
+		<appender-ref ref="base_appender"/>
 	</root>
+	
 </configuration>

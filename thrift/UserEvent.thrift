@@ -35,6 +35,5 @@ struct PutLogReq
 
 service LogService
 {
-	void putLog(1:PutLogReq putLogReq),
-	string test(1:string hello)
+	void putLog(1:PutLogReq putLogReq)
 }
